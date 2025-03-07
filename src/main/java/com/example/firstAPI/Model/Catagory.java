@@ -1,11 +1,12 @@
 package com.example.firstAPI.Model;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Catagory {
-    private Long id;
+@Entity
+public class Catagory extends BaseModel{
     private String name;
 }

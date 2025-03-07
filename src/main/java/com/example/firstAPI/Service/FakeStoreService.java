@@ -13,7 +13,7 @@ import com.example.firstAPI.Exceptions.ProductNotFoundException;
 import com.example.firstAPI.Model.Catagory;
 import com.example.firstAPI.Model.Product;
 
-@Service
+@Service("fakestoreservice")
 public class FakeStoreService implements ProductService{
 
     private RestTemplate restTemplate;
