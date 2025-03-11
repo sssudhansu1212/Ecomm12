@@ -45,17 +45,18 @@ public class ProductController {
     }
 
     @GetMapping()
+    
     public ResponseEntity<List<Product>> getAllProduct(){
         return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product){
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product)throws ProductNotFoundException{
        return new ResponseEntity<>(productService.replaceProduct(id, product),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String,String>> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Map<String,String>> deleteProduct(@PathVariable Long id)throws ProductNotFoundException{
         boolean val = productService.deleteProduct(id);
         if(val){
             Map<String,String> response = new HashMap<>();

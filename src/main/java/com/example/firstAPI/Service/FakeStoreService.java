@@ -84,7 +84,7 @@ public class FakeStoreService implements ProductService{
         return product;
     }
 
-    public Product replaceProduct(Long id,Product product){
+    public Product replaceProduct(Long id,Product product)throws ProductNotFoundException{
 
         String  url = "https://fakestoreapi.com/products/{id}";
 
@@ -96,11 +96,20 @@ public class FakeStoreService implements ProductService{
 
 		FakeStoreProductDTO fakeStoreProductDTO = restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor, id);
 
+        if(fakeStoreProductDTO == null){
+            throw new ProductNotFoundException("Product with this id "+id+" doesnt exsists");
+        }
+
         return convertFakeStoreProductToProduct(fakeStoreProductDTO);
     }
 
-    public Boolean deleteProduct(Long id){
-        String url = "https://fakestoreapi.in/api/products/";
+    public Boolean deleteProduct(Long id)throws ProductNotFoundException{
+        String url = "https://fakestoreapi.in/api/products/{id}";
+        FakeStoreProductDTO fakeStoreProductDTO = restTemplate.getForObject(url, FakeStoreProductDTO.class,id);
+
+        if(fakeStoreProductDTO == null){
+            throw new ProductNotFoundException("Product with this id "+id+" doesnt exsists");
+        }
         restTemplate.delete(url,id);
         return true;
     }
