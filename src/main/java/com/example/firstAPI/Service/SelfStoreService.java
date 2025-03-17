@@ -1,10 +1,8 @@
 package com.example.firstAPI.Service;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import com.example.firstAPI.Exceptions.ProductNotFoundException;
 import com.example.firstAPI.Model.Catagory;
@@ -37,24 +35,12 @@ public class SelfStoreService implements ProductService{
 
     @Override
     public Product createProduct(Product product) {
-        Catagory catagory;
-        Optional<Catagory> optionalCatagory = categoryrepository.findByname(product.getCatagory().getName());
-
-        if(optionalCatagory.isEmpty()){
-            catagory = categoryrepository.save(product.getCatagory());
-            
-        }else{
-            catagory = optionalCatagory.get();
-        }
-        catagory.setCreatedAt(new Date(System.currentTimeMillis()));
-        catagory.setUpdatedAt(new Date(System.currentTimeMillis()));
-        catagory.setDeleted(false);
-        product.setCatagory(catagory);
-
-        product.setCreatedAt(new Date(System.currentTimeMillis()));
-        product.setUpdatedAt(new Date(System.currentTimeMillis()));
-        product.setDeleted(false);
-        return productrepository.save(product);
+          Optional<Catagory> Optionalcatagory = categoryrepository.findByname(product.getCatagory().getName());
+          
+          if(Optionalcatagory.isPresent()){
+            product.setCatagory(Optionalcatagory.get());
+          }
+          return productrepository.save(product);
 
     }
 
@@ -76,6 +62,7 @@ public class SelfStoreService implements ProductService{
         Product productFromDb = optionalProduct.get();
 
         if(product.getCatagory() != null){
+            product.getCatagory().setUpdatedAt(new Date(System.currentTimeMillis()));
             productFromDb.setCatagory(product.getCatagory());
         }
         if(product.getDescription() != null){
@@ -91,6 +78,7 @@ public class SelfStoreService implements ProductService{
             productFromDb.setImageUrl(product.getImageUrl());
         }
 
+        productFromDb.setUpdatedAt(new Date(System.currentTimeMillis()));
         productFromDb = productrepository.save(productFromDb);
         return productFromDb;
     }
@@ -104,6 +92,19 @@ public class SelfStoreService implements ProductService{
 
         productrepository.deleteById(id);
         return true;
+    }
+
+    public List<Catagory> getProductFromCatagory(){
+        List<Catagory> c= categoryrepository.findAll();
+        // List<Product> p = null;
+        // for(Catagory catagory : c){
+        //     p = productrepository.findByCatagory(catagory);
+        //     for(Product product : p){
+        //         product.getTitle();
+        //     }
+        // }
+        
+        return c;
     }
 
 }

@@ -1,7 +1,8 @@
 package com.example.firstAPI.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,10 @@ public class Product extends BaseModel{
     private double price;
     private String description;
     private String imageUrl;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Catagory catagory;
+
+    public Product(){
+        super();
+    }
 }

@@ -19,4 +19,10 @@ public class BaseModel {
     private Date createdAt;
     private Date updatedAt;
     private boolean isDeleted;
+
+    public BaseModel(){
+        this.createdAt = new Date(System.currentTimeMillis());
+        this.updatedAt = new Date(System.currentTimeMillis());
+        this.isDeleted = false;
+    }
 }
