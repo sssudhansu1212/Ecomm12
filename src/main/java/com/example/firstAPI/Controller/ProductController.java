@@ -14,22 +14,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.firstAPI.DTO.UserDetailDTO;
 import com.example.firstAPI.Exceptions.ProductNotFoundException;
 import com.example.firstAPI.Model.Product;
+import com.example.firstAPI.Model.Role;
 import com.example.firstAPI.Service.ProductService;
+import com.example.firstAPI.commons.ApplicationCommons;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
     private ProductService productService;
+    private ApplicationCommons applicationCommons;
 
     @Autowired
-    ProductController(@Qualifier("selfstoreservice") ProductService productService){
+    ProductController(@Qualifier("selfstoreservice") ProductService productService,ApplicationCommons applicationCommons){
         this.productService = productService;
+        this.applicationCommons = applicationCommons;
     }
 
     @GetMapping("/{id}")
@@ -45,8 +51,20 @@ public class ProductController {
     }
 
     @GetMapping()
-    
-    public ResponseEntity<List<Product>> getAllProduct(){
+    public ResponseEntity<List<Product>> getAllProduct(@RequestHeader String token){
+        boolean isAdminRole = false;
+        //call the user service for the validation of token 
+        UserDetailDTO userDetailDTO = applicationCommons.validateToken(token);
+
+        for(Role role : userDetailDTO.getRoles()){
+            if(role.getName().equals("Admin")){
+                isAdminRole = true;
+                break;
+            }
+        }
+
+        if(!isAdminRole) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        
         return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.PAYLOAD_TOO_LARGE);
     }
 
