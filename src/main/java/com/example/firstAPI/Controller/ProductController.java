@@ -51,21 +51,21 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Product>> getAllProduct(@RequestHeader String token){
-        boolean isAdminRole = false;
-        //call the user service for the validation of token 
-        UserDetailDTO userDetailDTO = applicationCommons.validateToken(token);
+    public ResponseEntity<List<Product>> getAllProduct(){
+        // boolean isAdminRole = false;
+        // //call the user service for the validation of token 
+        // UserDetailDTO userDetailDTO = applicationCommons.validateToken(token);
 
-        for(Role role : userDetailDTO.getRoles()){
-            if(role.getName().equals("Admin")){
-                isAdminRole = true;
-                break;
-            }
-        }
+        // for(Role role : userDetailDTO.getRoles()){
+        //     if(role.getName().equals("Admin")){
+        //         isAdminRole = true;
+        //         break;
+        //     }
+        // }
 
-        if(!isAdminRole) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        // if(!isAdminRole) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         
-        return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.PAYLOAD_TOO_LARGE);
+        return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
