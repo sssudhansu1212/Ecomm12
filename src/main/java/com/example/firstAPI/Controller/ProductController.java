@@ -33,7 +33,7 @@ public class ProductController {
     private ApplicationCommons applicationCommons;
 
     @Autowired
-    ProductController(@Qualifier("selfstoreservice") ProductService productService,ApplicationCommons applicationCommons){
+    ProductController(@Qualifier("fakestoreservice") ProductService productService,ApplicationCommons applicationCommons){
         this.productService = productService;
         this.applicationCommons = applicationCommons;
     }
